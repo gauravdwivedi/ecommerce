@@ -6,6 +6,17 @@ module.exports.create = async function (req, res) {
     console.log(req.body);
 
     try {
+
+        //check if id is already exist in db
+        
+        Product.count({ id: req.body.id },async function (err, count) {
+            if (count > 0) {
+                return res.status(500).json({
+                    message: "id already exists choose different id"
+                });
+            } else {
+                
+            
         //Product will create new product in db    
         const product = await Product.create({
             id: req.body.id,
@@ -19,6 +30,12 @@ module.exports.create = async function (req, res) {
                 product: product
             } 
         });
+            }
+        });
+        
+            
+       
+        
             } catch (err) {
                 return res.status(500, {
             message: "Internal Server Error"
